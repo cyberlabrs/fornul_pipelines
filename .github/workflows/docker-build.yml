@@ -1,9 +1,10 @@
 name: PR convention and test build
 
-on:
-  pull_request:
-    types: [ opened, reopened, edited, synchronize ]
-    branches: [ main ]
+on: 
+  workflow_call:
+     secrets:
+      service_name:
+        required: true
 
 
 jobs:
