@@ -1,0 +1,27 @@
+name: PR convention and test build
+
+on:
+  pull_request:
+    types: [ opened, reopened, edited, synchronize ]
+    branches: [ main ]
+
+
+jobs:
+  Checking:
+      uses: cyberlabrs/fornul_pipelines/.github/workflows/pr-title.yml@main
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build
+      env:
+        SERVICE_NAME: ${{ secrets.service_name}}
+      run: |
+        docker build -t test $SERVICE_NAME/.
+  
+
