@@ -6,9 +6,6 @@ on:
       event_name:
         type: string
         required: true
-      service_name:
-        type: string
-        required: true
 
 jobs:
   PR-title-check:
@@ -24,5 +21,3 @@ jobs:
   Docker-build-test:
     if: inputs.event_name == 'opened' || inputs.event_name == 'reopened' || inputs.event_name == 'synchronize' || inputs.event_name == 'edited'
     uses: cyberlabrs/fornul_pipelines/.github/workflows/docker-build.yml@main
-    with:
-      service_name: ${{inputs.service_name}}
