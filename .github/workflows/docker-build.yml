@@ -1,4 +1,4 @@
-name: PR convention and test build
+name: Docker build 
 
 on: 
   workflow_call:
@@ -6,11 +6,7 @@ on:
       service_name:
         required: true
 
-
 jobs:
-  Checking:
-      uses: cyberlabrs/fornul_pipelines/.github/workflows/pr-title.yml@main
-
   build:
     name: build
     runs-on: ubuntu-latest
@@ -24,5 +20,3 @@ jobs:
         SERVICE_NAME: ${{ secrets.service_name}}
       run: |
         docker build -t test $SERVICE_NAME/.
-  
-
