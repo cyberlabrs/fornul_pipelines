@@ -1,0 +1,32 @@
+name: PR label check and comment 
+
+on:
+  workflow_call:
+    secrets: 
+      repo_token:
+        required: true
+
+jobs:
+  label-check:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Check labels
+        uses: docker://agilepathway/pull-request-label-checker:latest
+        with:
+          one_of: version:major,version:minor,version:patch,no_release
+          mode: exactly
+          count: 1
+          repo_token: ${{ secrets.repo_token }}
+
+  reminder_comment:
+    needs: Label-check
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: ':bangbang: This is github action reminder. :bangbang: When you make a pull request on main branch, you have to choose exactly one label.'
