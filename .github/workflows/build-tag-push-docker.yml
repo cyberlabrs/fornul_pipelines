@@ -88,7 +88,7 @@ jobs:
         SERVICE_NAME: ${{ secrets.service_name}}
         IMAGE_TAG: ${{ needs.new_version.outputs.new_version }}
       run: |
-        docker build --cache-from=$ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $SERVICE_NAME/.
+        docker build --cache-from=$ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $SERVICE_NAME/.
         echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
