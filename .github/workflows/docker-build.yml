@@ -2,10 +2,6 @@ name: Docker build
 
 on: 
   workflow_call:
-     inputs:
-      service_name:
-        type: string
-        required: true
 
 jobs:
   build:
@@ -20,4 +16,4 @@ jobs:
       env:
         SERVICE_NAME: ${{ inputs.service_name}}
       run: |
-        docker build -t test $SERVICE_NAME/.
+        docker build -t test .
