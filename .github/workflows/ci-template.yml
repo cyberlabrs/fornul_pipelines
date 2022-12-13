@@ -11,15 +11,7 @@ jobs:
   PR-title-check:
     if: inputs.event_name == 'opened' || inputs.event_name == 'reopened' || inputs.event_name == 'synchronize' || inputs.event_name == 'edited'
     uses: cyberlabrs/fornul_pipelines/.github/workflows/pr-title.yml@main
-
-  PR-label-check-and-reminder-comment:
-    needs: [PR-title-check]
-    if: inputs.event_name == 'opened' || inputs.event_name == 'reopened' || inputs.event_name == 'synchronize' || inputs.event_name == 'labeled' || inputs.event_name == 'unlabeled' || inputs.event_name == 'edited' 
-    uses: cyberlabrs/fornul_pipelines/.github/workflows/label-check&reminder-comment.yml@main
-    secrets:
-      repo_token: ${{ secrets.GITHUB_TOKEN }}
   
   Docker-build-test:
-    needs: [PR-label-check-and-reminder-comment]
     if: inputs.event_name == 'opened' || inputs.event_name == 'reopened' || inputs.event_name == 'synchronize' || inputs.event_name == 'edited'
     uses: cyberlabrs/fornul_pipelines/.github/workflows/docker-build.yml@main
