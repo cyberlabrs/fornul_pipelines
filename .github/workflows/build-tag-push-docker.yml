@@ -15,6 +15,16 @@ on:
         required: true
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: testing
+        env:
+          MARGED: ${{ github.event.pull_request.merged }}
+        run: |
+          echo $MERGED
+        
+    
   new_version:
     if: github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'no_release')
     runs-on: ubuntu-latest
