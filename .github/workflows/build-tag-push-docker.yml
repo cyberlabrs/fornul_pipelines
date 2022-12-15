@@ -1,4 +1,4 @@
-name: Build, tag and deploy docker image to ECR
+name: Build, tag and push docker image to ECR
 
 on: 
   workflow_call:

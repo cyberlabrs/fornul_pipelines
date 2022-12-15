@@ -14,4 +14,3 @@ jobs:
           min_length: 10
           max_length: 80
           github_token: ${{ github.token }}
-     
