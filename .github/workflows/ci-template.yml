@@ -9,9 +9,7 @@ on:
 
 jobs:
   PR-title-check:
-    if: inputs.event_name == 'opened' || inputs.event_name == 'reopened' || inputs.event_name == 'synchronize' || inputs.event_name == 'edited'
     uses: cyberlabrs/fornul_pipelines/.github/workflows/pr-title.yml@main
   
-  Docker-build-test:
-    if: inputs.event_name == 'opened' || inputs.event_name == 'reopened' || inputs.event_name == 'synchronize' || inputs.event_name == 'edited'
+  Build-test:
     uses: cyberlabrs/fornul_pipelines/.github/workflows/docker-build.yml@main

@@ -7,7 +7,7 @@ on:
         required: true
 
 jobs:
-  label-check:
+  Label-check:
     runs-on: ubuntu-latest
     steps:
 
@@ -21,7 +21,7 @@ jobs:
           count: 1
           repo_token: ${{ secrets.repo_token }}
 
-  reminder_comment:
+  Reminding_comment:
     needs: Label-check
     if: failure()
     runs-on: ubuntu-latest
