@@ -1,0 +1,16 @@
+on: 
+  workflow_call:
+
+jobs:
+  Set-default-label:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+    - name: Add label to pull request
+      run: |
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github+json" \
+          -d "{\"labels\":[\"version:patch\"]}" \
+          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/labels"
