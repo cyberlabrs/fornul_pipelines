@@ -13,7 +13,15 @@ on:
         required: true
       token:
         required: true
-
+      task_definition:
+        required: true
+      container_name:
+        required: true
+      ecs_fargate_service:
+        required: true
+      ecs_fargate_cluster:
+        required: true
+        
 jobs:
   new_version:
     if: github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'no_release')
@@ -91,3 +99,36 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+  deploy:
+    needs: push
+    runs-on: ubuntu-latest
+    env: 
+      IMAGE: ${{ needs.push.outputs.image }}
+      TASK_DEFINITION: ${{ secrets.task_definition }}
+      CONTAINER_NAME: ${{ secrets.container_name }}
+      ECS_FARGATE_SERVICE: ${{ secrets.ecs_fargate_service }}
+      ECS_CLUSTER: ${{ secrets.ecs_fargate_cluster }}
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.aws-access-key-id }}
+        aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+        aws-region: eu-central-1
+    - name: Download task definition
+      run: |
+          aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ env.IMAGE }}
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_FARGATE_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
