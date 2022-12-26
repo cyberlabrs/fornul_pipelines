@@ -112,9 +112,9 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.aws-access-key-id }}
-        aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
         aws-region: eu-central-1
+        role-duration-seconds: 900
+        role-to-assume: arn:aws:iam::959585416967:role/cyberlab-openid-dev/fornul_cicd
     - name: Download task definition
       run: |
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
