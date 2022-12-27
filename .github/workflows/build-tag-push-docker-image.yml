@@ -70,7 +70,8 @@ jobs:
   push:
     needs: new_version
     runs-on: ubuntu-latest
-
+    outputs:
+      image: ${{ steps.build.outputs.image}}
     steps:
 
     - name: Checkout
@@ -90,6 +91,7 @@ jobs:
         registries: ${{secrets.shared_account_id}}
 
     - name: Build, tag, and push image to Amazon ECR
+      id: build
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.ecr_repository }}
