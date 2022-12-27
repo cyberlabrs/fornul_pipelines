@@ -23,6 +23,8 @@ on:
         required: true
       node-auth-token:
         required: true
+      deployment-role:
+        required: true
 
 jobs:
   new_version:
@@ -123,7 +125,7 @@ jobs:
       with:
         aws-region: eu-central-1
         role-duration-seconds: 900
-        role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+        role-to-assume: ${{ secrets.deployment-role }}
     - name: Download task definition
       run: |
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
