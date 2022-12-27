@@ -123,7 +123,7 @@ jobs:
       with:
         aws-region: eu-central-1
         role-duration-seconds: 900
-        role-to-assume: arn:aws:iam::959585416967:role/cyberlab-openid-dev/fornul_cicd
+        role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
     - name: Download task definition
       run: |
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
