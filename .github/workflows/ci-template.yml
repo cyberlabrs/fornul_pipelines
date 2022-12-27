@@ -6,6 +6,9 @@ on:
       event_name:
         type: string
         required: true
+    secrets:
+      node-auth-token:
+        required: true
 
 jobs:
   PR-title-check:
@@ -13,3 +16,5 @@ jobs:
   
   Build-test:
     uses: cyberlabrs/fornul_pipelines/.github/workflows/docker-build.yml@main
+    secrets:
+      node-auth-token: ${{secrets.node-auth-token}}
