@@ -107,14 +107,14 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         echo "IMAGE_URL=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
   deploy:
-    needs: push
+    needs: [ push, new_version ]
     runs-on: ubuntu-latest
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
       id-token: write
       contents: read
     env: 
-      IMAGE: ${{ needs.push.outputs.IMAGE_URL }}
+      IMAGE: "${{ secrets.shared_account_id }}.dkr.ecr.eu-central-1.amazonaws.com/${{ secrets.ecr_repository }}:{{ needs.new_version.outputs.new_version }}"
       TASK_DEFINITION: ${{ secrets.task_definition }}
       CONTAINER_NAME: ${{ secrets.container_name }}
       ECS_FARGATE_SERVICE: ${{ secrets.ecs_fargate_service }}
@@ -135,7 +135,7 @@ jobs:
       with:
         task-definition: task-definition.json
         container-name: ${{ env.CONTAINER_NAME }}
-        image: ${{ env.IMAGE }}
+        image: ${{}}822014420193.dkr.ecr.eu-central-1.amazonaws.com/user-service:latest
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
