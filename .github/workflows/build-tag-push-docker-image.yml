@@ -114,7 +114,7 @@ jobs:
       id-token: write
       contents: read
     env: 
-      IMAGE: "${{ secrets.shared_account_id }}.dkr.ecr.eu-central-1.amazonaws.com/${{ secrets.ecr_repository }}:{{ needs.new_version.outputs.new_version }}"
+      IMAGE: "${{ secrets.shared_account_id }}.dkr.ecr.eu-central-1.amazonaws.com/${{ secrets.ecr_repository }}:latest"
       TASK_DEFINITION: ${{ secrets.task_definition }}
       CONTAINER_NAME: ${{ secrets.container_name }}
       ECS_FARGATE_SERVICE: ${{ secrets.ecs_fargate_service }}
