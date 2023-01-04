@@ -66,6 +66,7 @@ jobs:
         git add .
         git commit -m "new version"
         git push origin main -f --tags
+        
     outputs:
       new_version: ${{ steps.output.outputs.new_version}}
 
@@ -106,6 +107,7 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_OUTPUT
+
   deploy:
     needs: push
     runs-on: ubuntu-latest
@@ -119,6 +121,7 @@ jobs:
       CONTAINER_NAME: ${{ secrets.container_name }}
       ECS_FARGATE_SERVICE: ${{ secrets.ecs_fargate_service }}
       ECS_CLUSTER: ${{ secrets.ecs_fargate_cluster }}
+
     steps:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -126,9 +129,11 @@ jobs:
         aws-region: eu-central-1
         role-duration-seconds: 900
         role-to-assume: ${{ secrets.deployment-role }}
+
     - name: Download task definition
       run: |
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
+    
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -136,6 +141,7 @@ jobs:
         task-definition: task-definition.json
         container-name: ${{ env.CONTAINER_NAME }}
         image: ${{ env.IMAGE }}
+
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
