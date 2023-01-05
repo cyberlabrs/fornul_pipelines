@@ -1,4 +1,4 @@
-name: Build, tag and push docker image to ECR
+name: Release 
 
 on: 
   workflow_call:
@@ -41,7 +41,11 @@ jobs:
     - uses: actions/setup-node@v3
       with:
        node-version: 16
-       
+
+    - name: Looking for patch changes
+      if: ${{contains(github.event.pull_request.labels.*.name, 'version:patch')}}
+      run: echo "NEW_VERSION=$(npm version patch --no-git-tag-version --tag-version-prefix="")" >> $GITHUB_ENV
+
     - name: Looking for minor changes 
       if:  ${{contains(github.event.pull_request.labels.*.name, 'version:minor')}}
       run: echo "NEW_VERSION=$(npm version minor --no-git-tag-version --tag-version-prefix="")" >> $GITHUB_ENV
@@ -49,10 +53,6 @@ jobs:
     - name: Looking for major changes
       if:  ${{contains(github.event.pull_request.labels.*.name, 'version:major')}}
       run: echo "NEW_VERSION=$(npm version major --no-git-tag-version --tag-version-prefix="")" >> $GITHUB_ENV
-
-    - name: Looking for patch changes
-      if: ${{contains(github.event.pull_request.labels.*.name, 'version:patch')}}
-      run: echo "NEW_VERSION=$(npm version patch --no-git-tag-version --tag-version-prefix="")" >> $GITHUB_ENV
 
     - name: Set outputs
       id: output

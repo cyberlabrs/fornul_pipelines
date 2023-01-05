@@ -24,7 +24,7 @@ jobs:
             exit 1
           fi
 
-  reminding_comment:
+  comment:
     needs: label-check
     if: failure()
     runs-on: ubuntu-latest
