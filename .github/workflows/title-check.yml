@@ -1,0 +1,8 @@
+on: 
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    branches: [main]
+
+jobs:
+  PR-title-check:
+    uses: cyberlabrs/fornul_pipelines/.github/workflows/pr-title.yml@1.0.1
