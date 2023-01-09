@@ -12,7 +12,7 @@ on:
 
 jobs:
   PR-title-check:
-    uses: cyberlabrs/fornul_pipelines/.github/workflows/pr-title.yml@main
+    uses: cyberlabrs/fornul_pipelines/.github/workflows/pr-title.yml@1.0.1
   
   Build-test:
     uses: cyberlabrs/fornul_pipelines/.github/workflows/docker-build.yml@main
