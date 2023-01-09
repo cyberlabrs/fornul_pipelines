@@ -2,11 +2,13 @@ on:
   workflow_call:
 
 jobs:
-  Set-default-label:
+  set-default-label:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v3
+
     - name: Add label to pull request
       run: |
         curl -X POST \

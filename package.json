@@ -1,0 +1,19 @@
+{
+  "name": "fornul_pipelines",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyberlabrs/fornul_pipelines.git"
+  },
+  "author": "cyberlab",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cyberlabrs/fornul_pipelines/issues"
+  },
+  "homepage": "https://github.com/cyberlabrs/fornul_pipelines#readme"
+}
