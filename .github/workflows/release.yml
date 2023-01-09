@@ -30,6 +30,7 @@ jobs:
   new_version:
     if: github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'no_release')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
     - name: checkout
@@ -73,6 +74,8 @@ jobs:
   push:
     needs: new_version
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     outputs:
       IMAGE_TAG: ${{ steps.build.outputs.IMAGE_TAG }}
     steps:
@@ -111,6 +114,8 @@ jobs:
   deploy:
     needs: push
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
       id-token: write

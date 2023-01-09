@@ -9,6 +9,7 @@ on:
 jobs:
   label-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Checkout
@@ -28,6 +29,8 @@ jobs:
     needs: label-check
     if: failure()
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+
     steps:
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2

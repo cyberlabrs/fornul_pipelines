@@ -9,6 +9,8 @@ jobs:
   release:
     if: github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'no_release')
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
