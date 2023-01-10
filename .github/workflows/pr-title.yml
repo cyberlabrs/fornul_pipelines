@@ -1,16 +1,10 @@
 name: PR Title Checker
 
-
 on:
-  pull_request:
-    types:
-      - edited
-      - synchronize
-      - opened
-      - reopened
-    branches:
-      - main
   workflow_call:
+  pull_request:
+    types: [edited, synchronize, opened, reopened]
+    branches: [main]
 
 jobs:
   pr-title-check:
