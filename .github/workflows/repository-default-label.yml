@@ -1,0 +1,54 @@
+name: Labeling
+on: 
+  pull_request:
+    types: [opened, labeled, unlabeled]
+    branches: [main]
+
+jobs:
+  set-no_release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event.action == 'opened'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Add label to pull request
+      run: |
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github+json" \
+          -d "{\"labels\":[\"no_release\"]}" \
+          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/labels"
+
+  label-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event.action == 'labeled' || github.event.action == 'unlabeled'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check labels
+        run: |
+          labels=$(jq --raw-output '.pull_request.labels[] | .name' "$GITHUB_EVENT_PATH")
+          if [[ $labels =~ ^(no_release|version:minor|version:major|version:patch)$ ]]; then
+            echo "Exactly one label is selected."
+          else
+            echo "Error: You need to select exactly one label."
+            exit 1
+          fi
+
+  comment:
+    needs: label-check
+    if: failure()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: ':bangbang: This is github action reminder. :bangbang: When you make a pull request on main branch, you have to choose exactly one label.'
